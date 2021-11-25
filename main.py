@@ -1,8 +1,8 @@
 from numpy import double
 import MSK
 import cv2
-
-msk = MSK.m_CAM()
+port = 9
+msk = MSK.m_CAM(port)
 
 """
 Erklärung zum neuen Programm:
