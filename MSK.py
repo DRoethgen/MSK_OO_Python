@@ -5,19 +5,19 @@ import os
 import numpy
 import datetime as dt
 class m_CAM:
-    def __init__(self):
+    def __init__(self, _port=9):
         #IDS SW Kamera Initalisieren
         self.cam = Kamera.Ids_sw_cam()
         #Arduino Initalisieren
         #print("Bitte gib die Nummer des Com-Ports an, an dem der Arduino angeschlossen ist.")
         #port = input()
-        portNr = '8' # diese Zeile beim Ändern des Ports durch die beiden Zeilen hier drüber ersetzen
-        self.leds = Beleuchtung.Leds(portNr) 
+        # diese Zeile beim Ändern des Ports durch die beiden Zeilen hier drüber ersetzen
+        self.leds = Beleuchtung.Leds(_port) 
         self.cam.setPictureMode()
-        self.temp_frames = numpy.zeros((9,512,640))            
-        self.picsTaken = numpy.zeros((10))
-        self.ledNames = ("400nm","450nm","465nm","520nm","585nm","620nm","700nm","840nm","940nm")
-        self.camExpoTimes =[40,40,40,40,40,40,40,40,40,40]
+        self.temp_frames = numpy.zeros((10,512,640))            
+        self.picsTaken = numpy.zeros((11))
+        self.ledNames = ("400nm","450nm","465nm","520nm","585nm","620nm","660nm","730nm","840nm","940nm")
+        self.camExpoTimes =[40,40,40,40,40,40,40,40,40,40,40]
 
     def show(self,_frame,_time,_name):
         """show(frame,time,name)
@@ -76,7 +76,7 @@ class m_CAM:
         Speichert temporaer (solange das Programm laeuft) das aufgenommen Bild an der Stelle ID
         Somit koennen verschiedene Einstellung der Kamera ueberprueft werden und am Ende nur das Bild gespeichert werden,
         welches gewunscht ist.
-        Id 1-9 fuer die jeweiligen LEDs."""
+        Id 1-10 fuer die jeweiligen LEDs."""
         self.temp_frames[_id-1] = _frame
         self.picsTaken[_id] = 1
 
@@ -177,16 +177,16 @@ class m_CAM:
         if (_id >=0 and _id <10):
             self.camExpoTimes[_id] = _newExpo
     
-    def getExpoTimes(self,_id = 10):
+    def getExpoTimes(self,_id = 99):
         """getExpoTimes(_id)
         Gibt die aktuell hinterlegte Belichtungszeit der jeweiligen LEDs zurueck.
         Wenn keine ID uebergeben wird, werden die Belichtungszeiten von allen LEDs automatisch in die Konsole 
         ausgegeben."""
-        if (_id>=0 and _id <10):
+        if (_id>=0 and _id <11):
             return self.camExpoTimes[_id]
-        elif(_id ==10):
+        elif(_id ==99):
             i = 0
-            while(i<10):
+            while(i<11):
                 print("Die Belichtungszeit fuer LED{} betraegt aktuell: {} ms.".format(i,self.camExpoTimes[i]))
                 i+=1
             return

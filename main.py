@@ -1,8 +1,8 @@
 from numpy import double
 import MSK
 import cv2
-
-msk = MSK.m_CAM()
+port = 9
+msk = MSK.m_CAM(port)
 
 """
 Erklärung zum neuen Programm:
@@ -82,24 +82,24 @@ def menue_01(): #Bilder aufnehmen
             msk.saveTempFrame(msk.getNewLEDFrame(1),1)
         elif (e==2):
             i = 2
-            while (i < 8):
+            while (i < 9):
                 msk.saveTempFrame(msk.getNewLEDFrame(i),i)
                 i +=1
         elif (e==3):
-            i = 8
-            while (i < 10):
+            i = 9
+            while (i < 11):
                 msk.saveTempFrame(msk.getNewLEDFrame(i),i)
                 i +=1
         elif (e==4):
             i = 1
-            while (i < 10):
+            while (i < 11):
                 msk.saveTempFrame(msk.getNewLEDFrame(i),i)
                 i +=1
         elif (e==5):
             print("Welche LED soll aufgenommen werden [1-9]?")
             while(1):
                 f = int(input)
-                if (f > 0 and f < 10):
+                if (f > 0 and f < 11):
                     msk.saveTempFrame(msk.getNewLEDFrame(f),f)
                     break
                 else:
@@ -127,24 +127,24 @@ def menue_02(): #Bilder speichern
                 
             elif (e==2):
                 i = 2
-                while (i < 8):
+                while (i < 9):
                     msk.save(msk.getTempFrame(i),0,"{}.jpg".format(msk.getLEDnames(i)),0)
                     i +=1
             elif (e==3):
-                i = 8
-                while (i < 10):
+                i = 9
+                while (i < 11):
                     msk.save(msk.getTempFrame(i),0,"{}.jpg".format(msk.getLEDnames(i)),0)
                     i +=1
             elif (e==4):
                 i = 1
-                while (i < 10):
+                while (i < 11):
                     msk.save(msk.getTempFrame(i),0,"{}.jpg".format(msk.getLEDnames(i)),0)
                     i +=1
             elif (e==5):
                 print("Welche LED soll gespeichert werden [1-9]?")
                 while(1):
                     f = int(input)
-                    if (f > 0 and f < 10):
+                    if (f > 0 and f < 11):
                         msk.save(msk.getTempFrame(f),0,"{}.jpg".format(msk.getLEDnames(f)),0)
                         break
         else:
@@ -166,13 +166,13 @@ def menue_07(): #Kalibrieren
             if (e == 1):
                 msk.getLiveVideo()
             elif (e==2):
-                 print("Welche LED moechtest du aktivieren?[1-9]")
+                 print("Welche LED moechtest du aktivieren?[1-10]")
                  print("0.: zurueck im Menue")
                  while(1):
                     e=int(input)
                     if (e==0):
                         break
-                    elif(e>0 and e <10):
+                    elif(e>0 and e <11):
                         msk.leds.setLED(e)
                         print("Zum Ausschalten, beliebige Taste druecken")
                         input()
@@ -189,10 +189,10 @@ def menue_07(): #Kalibrieren
                     if (e==0):
                         return
                     elif(e>0 and e <400):
-                        print("Von welcher LED soll die Beleuchtungszeit auf {} ms veraendert werden [0-9]?".format(e))
+                        print("Von welcher LED soll die Beleuchtungszeit auf {} ms veraendert werden [0-10]?".format(e))
                         while(1):
                             f = int(input())
-                            if (f>=0 and f <10):
+                            if (f>=0 and f <11):
                                 msk.setExpoTimes(e,f)
                                 break
                             else:

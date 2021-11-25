@@ -11,7 +11,7 @@ class Leds:
     def setLED(self,ledNr):
         """setLED(ledNR)
         aktiviert in Abhaengigkeit der ledNr die entsprechende LED.
-        1 = 400, 2 = 450, 3 = 465, 4 = 520, 5=565, 6 = 620, 7 = 700, 8 = 850, 9 = 940
+        1 = 400, 2 = 450, 3 = 465, 4 = 520, 5=565, 6 = 620, 7 = 660, 8 = 730, 9 = 850, 10 = 940
         """
         if (ledNr == 1):
             print("Aktiviere LED1 - 400nm")
@@ -38,17 +38,21 @@ class Leds:
             self.__board.digital[5].write(0)
             self.__board.digital[10].write(1)
         elif (ledNr == 7):
-            print("Aktiviere LED7 - 700nm")
+            print("Aktiviere LED7 - 660nm")
             self.__board.digital[6].write(0)
             self.__board.digital[8].write(1)
         elif (ledNr == 8):
-            print("Aktiviere LED8 - 840nm")
+            print("Aktiviere LED8 - 730nm")
             self.__board.digital[6].write(0)
             self.__board.digital[9].write(1)
         elif (ledNr == 9):
-            print("Aktiviere LED9 - 940nm")
+            print("Aktiviere LED9 - 850nm")
             self.__board.digital[6].write(0)
             self.__board.digital[10].write(1)
+        elif (ledNr ==10):
+            print("Aktiviere LED10 - 940nm")
+            self.__board.digital[7].write(0)
+            self.__board.digital[8].write(1)
         else:
             print("ERROR - setLED")
     time.sleep(1/10)
@@ -79,8 +83,9 @@ class Leds:
         print(" 4.   Sichtbares Licht       520nm       Gruen")
         print(" 5.   Sichtbares Licht       585nm       Amber")
         print(" 6.   Sichtbares Licht       620nm       Rot")
-        print(" 7.   Sichtbares Licht       700nm       Rot")
-        print(" 8.         IR               840nm       -----")
-        print(" 9.         IR               940nm       -----")
+        print(" 7.   Sichtbares Licht       660nm       Rot")
+        print(" 8.   Sichtbares Licht       730nm       Far-Rot")
+        print(" 9.         IR               840nm       -----")
+        print(" 10.        IR               940nm       -----")
         print("-------------------------------------------------------------------------------")
         
