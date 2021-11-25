@@ -5,14 +5,14 @@ import os
 import numpy
 import datetime as dt
 class m_CAM:
-    def __init__(self):
+    def __init__(self, _port=9):
         #IDS SW Kamera Initalisieren
         self.cam = Kamera.Ids_sw_cam()
         #Arduino Initalisieren
         #print("Bitte gib die Nummer des Com-Ports an, an dem der Arduino angeschlossen ist.")
         #port = input()
-        portNr = '8' # diese Zeile beim Ändern des Ports durch die beiden Zeilen hier drüber ersetzen
-        self.leds = Beleuchtung.Leds(portNr) 
+        # diese Zeile beim Ändern des Ports durch die beiden Zeilen hier drüber ersetzen
+        self.leds = Beleuchtung.Leds(_port) 
         self.cam.setPictureMode()
         self.temp_frames = numpy.zeros((10,512,640))            
         self.picsTaken = numpy.zeros((11))
