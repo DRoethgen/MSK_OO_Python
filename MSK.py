@@ -17,7 +17,7 @@ class m_CAM:
         self.temp_frames = numpy.zeros((10,512,640))            
         self.picsTaken = numpy.zeros((11))
         self.ledNames = ("400nm","450nm","465nm","520nm","585nm","620nm","660nm","730nm","840nm","940nm")
-        self.camExpoTimes =[40,40,40,40,40,40,40,40,40,40,40]
+        self.camExpoTimes =[40,40,40,40,40,40,40,40,40,40,40] #0 = keine LED 11 = 940nm.
 
     def show(self,_frame,_time,_name):
         """show(frame,time,name)
@@ -36,6 +36,7 @@ class m_CAM:
         Ort = Speicherstelle
         Name = Dateiname
         Param = 1 -> Speichert die Kameraparameter mit ab
+        pName = "ABC" -> Speichert die Kameraparameter mit dem Inhalt von pName als Namenszusatz ab -> Hier also ABC_Datum_Kameraparameter.ini
         """
         oldPfad = os.getcwd()
         if not os.path.exists('Aufnahmen'):
@@ -56,6 +57,12 @@ class m_CAM:
     def getNewLEDFrame(self,_ledNr = 0,_exposure = 0,_gamma = 0, _shutter = 0):
         """getNewLEDFrame(ledNr,exposure,gamma,shutter)
         Liefert einen Bildframe mit den gewunschten Einstellung zurueck.
+        ledNr = 0 -> keine LED | 1 = 400nm | ... | 10 = 940nm..
+        Exposure (Belichtungszeit) -> Wert in ms für die Belichtungszeit der Kamera
+        Gamma -> Gammerkorrektur -> Achtung INT Wert Eingabe 100 => faktor 1 | Eingabe 150 => faktor 1,5 usw.
+        shutter -> Hiermit kann zwischen den verschiedenen Shutter Modien gewechselt werden für Details siehe UeyeDoku 
+        bzw. in die entsprechende Funktion der Kamera.py
+        Wenn keine der Einstellugnsmöglichkeiten mitgegeben wird, wird ein Bild ohne LED und mit den in der Kamera hinterlegten Werten aufgenommen
         """
         if not (_exposure==0):
             self.cam.setExposure(_exposure)

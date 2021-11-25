@@ -5,8 +5,8 @@ import os
 Dieses Skript dient dazu, einzlene, neue Funktionen, Klassen zu testen. So muss nicht lange durch das 
 Hauptprogramm und die darin enthaltene Struktur navigiert werden, sondern man kann die zutestenen Funktionen direkt
 unten aufrufen."""
-
-msk = MSK.m_CAM()
+Port = 9
+msk = MSK.m_CAM(Port)
 
 #msk.getNPictures(5,10)
 #msk.getDiffPicture()
