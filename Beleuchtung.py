@@ -4,7 +4,7 @@ class Leds:
     
     def __init__(self,_port):
         print("Stelle Verbindung mit dem Arduino her...")
-        _port = "COM"+_port
+        _port = "COM"+str(_port)
         self.__board = Arduino(_port)
         print("Arduino ist bereit")
     
@@ -53,6 +53,8 @@ class Leds:
             print("Aktiviere LED10 - 940nm")
             self.__board.digital[7].write(0)
             self.__board.digital[8].write(1)
+            #self.__board.digital[9].write(1) # für 6 LEDs
+            #self.__board.digital[10].write(1) # für 9 LEDs
         else:
             print("ERROR - setLED")
     time.sleep(1/10)
@@ -89,3 +91,26 @@ class Leds:
         print(" 10.        IR               940nm       -----")
         print("-------------------------------------------------------------------------------")
         
+    def debug940nm(self,_id):
+        print("Aktiviere LED10 - 940nm")
+        
+        if (_id == 1):
+            print("3-LEDs")
+            self.__board.digital[7].write(0)
+            self.__board.digital[8].write(1)
+            time.sleep(1)
+        elif (_id ==2):
+            print("6-LEDs")
+            self.__board.digital[7].write(0)
+            self.__board.digital[8].write(1)
+            self.__board.digital[9].write(1)
+            time.sleep(1)
+        elif (_id==3):
+            print("9-LEDs")
+            self.__board.digital[7].write(0) 
+            self.__board.digital[8].write(1)
+            self.__board.digital[9].write(1) 
+            self.__board.digital[10].write(1)
+            time.sleep(1)
+        time.sleep(1/10)
+        return

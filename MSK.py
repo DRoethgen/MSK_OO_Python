@@ -201,3 +201,17 @@ class m_CAM:
             print("ERROR -getExpoTimes")
             return -1
 
+
+    def get940nm(self):
+        self.leds.setLEDOff()
+        self.leds.debug940nm(1)
+        self.show(self.cam.getPicture(),1,"3 LEDs")
+        self.leds.setLEDOff()
+        self.leds.debug940nm(2)
+        self.show(self.cam.getPicture(),1,"6 LEDs")
+        self.leds.setLEDOff()
+        self.leds.debug940nm(3)
+        self.show(self.cam.getPicture(),1,"9 LEDs")
+        self.leds.setLEDOff()
+ 
+        return
