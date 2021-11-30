@@ -6,6 +6,7 @@ class Leds:
         print("Stelle Verbindung mit dem Arduino her...")
         _port = "COM"+str(_port)
         self.__board = Arduino(_port)
+        self.setLEDOff()
         print("Arduino ist bereit")
     
     def setLED(self,ledNr):
@@ -52,7 +53,7 @@ class Leds:
         elif (ledNr ==10):
             print("Aktiviere LED10 - 940nm")
             self.__board.digital[7].write(0)
-            self.__board.digital[8].write(1)
+            self.__board.digital[8].write(1) # für 3 LEDs
             #self.__board.digital[9].write(1) # für 6 LEDs
             #self.__board.digital[10].write(1) # für 9 LEDs
         else:

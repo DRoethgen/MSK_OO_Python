@@ -22,6 +22,7 @@ class Ids_sw_cam:
         self.__channels = 3   
         self.__m_nColorMode = ueye.INT()		
         self.__bytes_per_pixel = int(self.__nBitsPerPixel / 8)
+        self.__modi = 0 # 0 fuer Bildmouds 1 fuer Kameramodus
         # Starts the driver and establishes the connection to the camera
         nRet = ueye.is_InitCamera(self.__hCam, None)
         if nRet != ueye.IS_SUCCESS:
@@ -159,8 +160,10 @@ class Ids_sw_cam:
         aufgenommen werden.
         """
         #setzt die Kamera in den Software Trigger Modus
-        ueye.is_SetExternalTrigger(self.__hCam,ueye.IS_SET_TRIGGER_SOFTWARE)
-        self.getPicture()
+        if not (self.__modi == 0):
+            ueye.is_SetExternalTrigger(self.__hCam,ueye.IS_SET_TRIGGER_SOFTWARE)
+            self.getPicture()
+            self.__modi = 0
         time.sleep(1/10) 
 
     def getPicture(self):
@@ -181,11 +184,13 @@ class Ids_sw_cam:
         """
         #Dieser Modus nimmt dauerhaft auf
         # Activates the camera's live video mode (free run mode)
-        nRet = ueye.is_CaptureVideo(self.__hCam, ueye.IS_DONT_WAIT)
-        if nRet != ueye.IS_SUCCESS:
-            print("is_CaptureVideo ERROR")
-        else:
-            print("is_CaptureVideo succes")
+        if not (self.__modi == 1):
+            nRet = ueye.is_CaptureVideo(self.__hCam, ueye.IS_DONT_WAIT)
+            if nRet != ueye.IS_SUCCESS:
+                print("is_CaptureVideo ERROR")
+            else:
+                print("is_CaptureVideo succes")
+            self.__modi = 1
         time.sleep(1/10) 
 
     def getVideostream(self):
@@ -295,3 +300,59 @@ class Ids_sw_cam:
         else:
             shutter = "Error GET Shuttermode"
         return shutter
+
+    def getFPNMode(self, _id=0):
+        """getFPNMode
+        Liefert den aktuell eingestellten Modus zur Fixed Pattern Korrektur zurück.
+        id = 0 gibt den aktuellen Wert
+        id = 1 gibt den Standard Wert"""
+        _fpnMode = ueye.int(3)
+        if (_id == 0):
+            nRet = ueye.is_DeviceFeature(self.__hCam, ueye.IS_DEVICE_FEATURE_CMD_GET_FPN_CORRECTION_MODE,_fpnMode,ueye.sizeof(_fpnMode))
+            
+        elif (_id == 1):
+            nRet= ueye.is_DeviceFeature(self.__hCam, ueye.IS_DEVICE_FEATURE_CMD_GET_FPN_CORRECTION_MODE_DEFAULT,_fpnMode,ueye.sizeof(_fpnMode))
+        
+        elif (_id == 2):
+            nRet= ueye.is_DeviceFeature(self.__hCam, ueye.IS_DEVICE_FEATURE_CAP_FPN_CORRECTION,_fpnMode,ueye.sizeof(_fpnMode))
+        self.getErrorMessage(nRet)
+
+
+
+        time.sleep(1/10)
+        return _fpnMode
+    
+    def setFPNMode(self,_mode):
+        _fpnMode = ueye.int(_mode)
+        if ((_mode == 0 ) or (_mode ==1)):
+            nRet = ueye.is_DeviceFeature(self.__hCam, ueye.IS_DEVICE_FEATURE_CMD_SET_FPN_CORRECTION_MODE,_fpnMode,ueye.sizeof(_fpnMode))
+            self.getErrorMessage(nRet)
+            time.sleep(1/10)
+            return
+        else:
+            print("Error setFPNMode!")
+            return
+
+    def getErrorMessage(self,_nRet):
+        if (_nRet == ueye.IS_CANT_COMMUNICATE_WITH_DRIVER):
+            print("Error - Fehlerhafte Kommunikation mit dem Gerätetreiber")
+        elif(_nRet == ueye.IS_CANT_OPEN_DEVICE):
+            print("Error - Kann keine Verbindung zum Gerät herstellen")
+        elif(_nRet == ueye.IS_INVALID_CAPTURE_MODE):
+            print("Die Funktion kann im aktuellen Betriebsmodus der Kamera (Freilaufend, Trigger oder Standby) nicht ausgeführt werden.")
+        elif(_nRet == ueye.IS_INVALID_CAMERA_HANDLE):
+            print("Ungültiges Kamera-Handle")
+        elif(_nRet == ueye.IS_INVALID_PARAMETER):
+            print("Einer der übergebenen Parameter ist außerhalb des gültigen Bereichs, oder für diesen Sensor nicht unterstützt, bzw. in diesem Modus nicht zugänglich")
+        elif(_nRet == ueye.IS_IO_REQUEST_FAILED):
+            print("Eine IO Anforderung des uEye Treibers schlug fehl.")
+        elif(_nRet == ueye.IS_NOT_SUPPORTED):
+            print("Das verwendete Kameramodell unterstützt diese Funktion oder Einstellung nicht.")
+        elif(_nRet == ueye.IS_OUT_OF_MEMORY):
+            print("Es konnte kein Speicher alloziert werden.")
+        elif(_nRet == ueye.IS_SUCCESS):
+            print("Änderung der Parameter war erfolgreich.")
+        elif(_nRet == ueye.IS_NO_SUCCESS):
+            print("Allgemeine Fehlermeldung")
+        
+
